@@ -7,8 +7,8 @@ import sys
 import os
 import importlib
 import argparse
+import json
 
-BSZ=256
 VALITER=1e3
 DISPITER=10
 WD=1e-4
@@ -36,20 +36,23 @@ parser.add_argument('-ngpu',help='How many gpus to use',type=int,default=1)
 parser.add_argument('-qtype',type=int,default=0,
                     help='Quantization type: 0: None. 4, 8: Simple quantization to 4 or 8 bits. ' \
                          'Defalut: 0.')
+parser.add_argument('-bs', type=int, default=128, help="Batch size")
 opts = parser.parse_args()
 saveloc = opts.save
+
+BSZ=opts.bs
 
 ##########################################################################################
 # Load data
 
-BDIR='/scratch/data/ImageNet/clsloc/'
+BDIR='/home/ubuntu/imagenet/'
 train = [f.rstrip().split(',') for f in open(BDIR+'train.txt').readlines()]
 val = [f.rstrip().split(',') for f in open(BDIR+'val.txt').readlines()]
 
-train_im = [BDIR+f[0] for f in train]
+train_im = [f[0] for f in train]
 train_lb = [int(f[1]) for f in train]
 
-val_im = [BDIR+f[0] for f in val]
+val_im = [f[0] for f in val]
 val_lb = [int(f[1]) for f in val]
 
 ##########################################################################################
@@ -59,7 +62,7 @@ g = Model(BSZ//(opts.split*opts.ngpu),opts.qtype,WD,opts.split,opts.ngpu)
 
 
 ESIZE = len(train_im)//BSZ
-VSIZE = 40 #len(val_im)//BSZ
+VSIZE = len(val_im)//BSZ
 
 rs = np.random.RandomState(0)
 
@@ -70,7 +73,6 @@ if os.path.isfile(saveloc):
         idx = rs.permutation(len(train_im))
     mprint("Restored to iteration %d" % origiter)    
 niter = origiter    
-    
 
 avg_loss = 0.; avg_acc = 0.
 while niter < MAXITER+1:
@@ -101,13 +103,30 @@ while niter < MAXITER+1:
     b_lb = [train_lb[idx[i]] for i in range(b*BSZ,(b+1)*BSZ)]
     b_lb = np.reshape(np.int32(b_lb),[-1,1,1,1])
 
+    tic = time.time()
     g.binit()
     for s in range(opts.split):
         acc,loss = g.forward([True,b_im[s::opts.split]],b_lb[s::opts.split,...],True)
         avg_loss = avg_loss + loss; avg_acc = avg_acc + acc;
         g.hback()
     g.cback(lr)
-    
+    batch_time = time.time() - tic
+
+    ips = BSZ / batch_time
+    print("Train throughput: %.2f ips" % ips)
+    if niter >= 3:
+        out_file = "speed_results.tsv"
+        with open(out_file, "a") as fout:
+            val_dict = {
+                "network": 'resnet152',
+                "algorithm": "exact" if opts.qtype == 0 else "quantize",
+                "batch_size": opts.bs,
+                "ips": ips,
+            }
+            fout.write(json.dumps(val_dict) + "\n")
+            print(f"save results to {out_file}")
+            exit()
+
     niter = niter+1
     
     if niter % DISPITER == 0:

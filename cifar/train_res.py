@@ -88,10 +88,14 @@ while niter < dset.MAXITER+1:
 
     inp_b = dset.augment(train_im[idx[b:b+BSZ],...])
         
+    tic = time.time()
     acc,loss = g.forward(inp_b,train_lb[idx[b:b+BSZ],...])
     g.backward(lr)
     niter = niter+1
-    
+    batch_time = time.time() - tic
+
+    print("throughput %.2f ips" % (BSZ / batch_time))
+
     avg_loss = avg_loss + loss; avg_acc = avg_acc + acc;
     if niter % DISPITER == 0:
         avg_loss = avg_loss / DISPITER; avg_acc = avg_acc / DISPITER
