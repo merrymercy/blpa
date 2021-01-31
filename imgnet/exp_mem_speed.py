@@ -68,15 +68,15 @@ def get_ips(network, alg, batch_size):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", type=str,
-            choices=['linear_search', 'binary_search'],
-            default='linear_search')
+            choices=['linear_scan', 'binary_search'],
+            default='linear_scan')
     args = parser.parse_args()
 
     networks = ['resnet152']
     algs = ['quantize']
-    batch_sizes = [528, 530, 532, 534, 536, 538, 540]
+    batch_sizes = [32] + list(range(64, 800, 64))
 
-    if args.mode == 'linear_search':
+    if args.mode == 'linear_scan':
         for network in networks: 
             for alg in algs:
                 for batch_size in (batch_sizes or network_to_batch_size[network]):
