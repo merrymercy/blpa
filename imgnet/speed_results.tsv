@@ -1,4 +1,21 @@
-# Binary search
+# Exact x Linear scan
+{"network": "resnet152", "algorithm": "exact", "batch_size": 32, "ips": 21.938267462115313}
+{"network": "resnet152", "algorithm": "exact", "batch_size": 64, "ips": 23.453646940450373}
+{"network": "resnet152", "algorithm": "exact", "batch_size": 96, "ips": 24.17160219086092}
+{"network": "resnet152", "algorithm": "exact", "batch_size": 128, "ips": 24.733491837735816}
+{"network": "resnet152", "algorithm": "exact", "batch_size": 160, "ips": 24.882812796915918}
+{"network": "resnet152", "algorithm": "exact", "batch_size": 192, "ips": 24.851981527899344}
+{"network": "resnet152", "algorithm": "exact", "batch_size": 224, "ips": -1}
+{"network": "resnet152", "algorithm": "exact", "batch_size": 192, "ips": 24.822189487206224}
+{"network": "resnet152", "algorithm": "exact", "batch_size": 196, "ips": 24.785021118640497}
+{"network": "resnet152", "algorithm": "exact", "batch_size": 200, "ips": 24.814766520265817}
+{"network": "resnet152", "algorithm": "exact", "batch_size": 204, "ips": 25.01349110348884}
+{"network": "resnet152", "algorithm": "exact", "batch_size": 208, "ips": 25.010555107089694}
+{"network": "resnet152", "algorithm": "exact", "batch_size": 212, "ips": 24.863760506824605}
+{"network": "resnet152", "algorithm": "exact", "batch_size": 216, "ips": 24.942084495214083}
+{"network": "resnet152", "algorithm": "exact", "batch_size": 220, "ips": -1}
+
+# Quantize x Binary search
 {"network": "resnet152", "algorithm": "quantize", "batch_size": 576, "ips": -1}
 {"network": "resnet152", "algorithm": "quantize", "batch_size": 350, "ips": 23.710607291257762}
 {"network": "resnet152", "algorithm": "quantize", "batch_size": 462, "ips": 23.713686822319243}
@@ -8,7 +25,7 @@
 {"network": "resnet152", "algorithm": "quantize", "batch_size": 530, "ips": 23.969947662797573}
 {"network": "resnet152", "algorithm": "quantize", "batch_size": 532, "ips": -1}
 
-# Linear scan
+# Quantize x Linear scan
 {"network": "resnet152", "algorithm": "quantize", "batch_size": 32, "ips": 20.890812914171423}
 {"network": "resnet152", "algorithm": "quantize", "batch_size": 64, "ips": 22.223284707415786}
 {"network": "resnet152", "algorithm": "quantize", "batch_size": 128, "ips": 23.458130386644928}
@@ -19,3 +36,4 @@
 {"network": "resnet152", "algorithm": "quantize", "batch_size": 448, "ips": 23.908536099303156}
 {"network": "resnet152", "algorithm": "quantize", "batch_size": 512, "ips": 24.107696878928124}
 {"network": "resnet152", "algorithm": "quantize", "batch_size": 576, "ips": -1}
+
