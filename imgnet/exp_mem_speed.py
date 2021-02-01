@@ -74,7 +74,7 @@ if __name__ == "__main__":
 
     networks = ['resnet152']
     algs = ['quantize']
-    batch_sizes = [32] + list(range(64, 800, 64))
+    batch_sizes = [32] + list(range(64, 800, 32))
 
     if args.mode == 'linear_scan':
         for network in networks: 

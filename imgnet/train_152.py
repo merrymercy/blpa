@@ -75,6 +75,7 @@ if os.path.isfile(saveloc):
 niter = origiter    
 
 avg_loss = 0.; avg_acc = 0.
+train_ips_list = []
 while niter < MAXITER+1:
     lr = get_lr(niter)
     
@@ -113,15 +114,16 @@ while niter < MAXITER+1:
     batch_time = time.time() - tic
 
     ips = BSZ / batch_time
-    print("Train throughput: %.2f ips" % ips)
+    train_ips_list.append(ips)
+    print("Batch size: %d\tTrain throughput: %.2f ips" % (BSZ, ips))
     if niter >= 3:
         out_file = "speed_results.tsv"
         with open(out_file, "a") as fout:
             val_dict = {
                 "network": 'resnet152',
-                "algorithm": "exact" if opts.qtype == 0 else "quantize",
+                "algorithm": "blpa-exact" if opts.qtype == 0 else "blpa",
                 "batch_size": opts.bs,
-                "ips": ips,
+                "ips": np.median(train_ips_list),
             }
             fout.write(json.dumps(val_dict) + "\n")
             print(f"save results to {out_file}")
