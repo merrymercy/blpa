@@ -126,7 +126,7 @@ while niter < MAXITER+1:
         out_file = "speed_results.tsv"
         with open(out_file, "a") as fout:
             val_dict = {
-                "network": 'resnet152',
+                "network": opts.model,
                 "algorithm": "blpa-exact" if opts.qtype == 0 else "blpa",
                 "batch_size": opts.bs,
                 "ips": np.median(train_ips_list),
