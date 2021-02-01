@@ -37,6 +37,7 @@ parser.add_argument('-qtype',type=int,default=0,
                     help='Quantization type: 0: None. 4, 8: Simple quantization to 4 or 8 bits. ' \
                          'Defalut: 0.')
 parser.add_argument('-bs', type=int, default=128, help="Batch size")
+parser.add_argument('-model', type=str, default='resnet152')
 opts = parser.parse_args()
 saveloc = opts.save
 
@@ -57,7 +58,12 @@ val_lb = [int(f[1]) for f in val]
 
 ##########################################################################################
 
-from imResnet152 import Model
+if opts.model == 'resnet152':
+    from imResnet152 import Model
+elif opts.model == 'resnet50':
+    from imResnet50 import Model
+else:
+    raise ValueError("Invalid model: " + opts.model)
 g = Model(BSZ//(opts.split*opts.ngpu),opts.qtype,WD,opts.split,opts.ngpu)
 
 
