@@ -19,6 +19,7 @@ network_to_batch_size = {
 network_to_command = {
     "resnet152":  "python3 train_152.py -save saved_models -bs BS CONFIG -model resnet152",
     "resnet50":  "python3 train_152.py -save saved_models -bs BS CONFIG -model resnet50",
+    "wide_resnet101_2":  "python3 train_152.py -save saved_models -bs BS CONFIG -model wide_resnet101_2",
 }
 
 
@@ -73,7 +74,7 @@ if __name__ == "__main__":
             default='linear_scan')
     args = parser.parse_args()
 
-    networks = ['resnet50']
+    networks = ['resnet152', 'resnet50', 'wide_resnet101_2']
     algs = ['quantize']
     batch_sizes = list(range(32, 1024, 32))
 

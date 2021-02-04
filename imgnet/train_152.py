@@ -62,6 +62,8 @@ if opts.model == 'resnet152':
     from imResnet152 import Model
 elif opts.model == 'resnet50':
     from imResnet50 import Model
+elif opts.model == 'wide_resnet101_2':
+    from imWResnet101 import Model
 else:
     raise ValueError("Invalid model: " + opts.model)
 g = Model(BSZ//(opts.split*opts.ngpu),opts.qtype,WD,opts.split,opts.ngpu)
